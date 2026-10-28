@@ -1,0 +1,9 @@
+{
+  "model": {
+    "type": "minecraft:special",
+    "base": "dxr_mc_extras:item/sky_block",
+    "model": {
+      "type": "dxr_mc_extras:sky_block"
+    }
+  }
+}
