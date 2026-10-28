@@ -33,22 +33,14 @@ base {
     archivesName = mod_id
 }
 
-// Mojang ships Java 25 to end users in 26.3, so mods should target Java 25.
 java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 neoForge {
-    // Specify the version of NeoForge to use.
     version = project.neo_version
 
-    // This line is optional. Access Transformers are automatically detected
-    // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
-
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
             client()
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
@@ -58,9 +50,6 @@ neoForge {
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
         gameTestServer {
             type = "gameTestServer"
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
@@ -68,25 +57,14 @@ neoForge {
 
         data {
             clientData()
-            // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
-            // gameDirectory = project.file('run-data')
 
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
             programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
         }
 
         // applies to all the run configs above
         configureEach {
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
             systemProperty 'forge.logging.markers', 'REGISTRIES'
 
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
             logLevel = org.slf4j.event.Level.DEBUG
         }
     }
@@ -98,28 +76,15 @@ neoForge {
     }
 }
 
-// Sets up a dependency configuration called 'localRuntime'.
-// This configuration should be used instead of 'runtimeOnly' to declare
-// a dependency that will be present for runtime testing but that is
-// "optional", meaning it will not be pulled by dependents of this mod.
 configurations {
     runtimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
     implementation("thedarkcolour:kotlinforforge-neoforge:6.4.0")
-
-    // 开发期把核心模组 Illusion 的构建产物也塞进运行期 classpath：这样在本模组的 runClient 里
-    // 就能同时加载 dxr_mc（否则 D3D12 后端与管线系统都不在，天空方块只能退化到原版 OpenGL 路径）。
-    // 编译期不需要它 —— 天空方块只用原版与 NeoForge 的公开 API。目录不存在或还没构建过核心模组时
-    // 这个 fileTree 是空的，不会报错；`*-ALL.jar` 是一次性测试包，重复加载会撞 modid，排除掉。
     localRuntime fileTree(dir: '../Illusion/build/libs', include: ['dxr_mc-*.jar'], exclude: ['*-ALL.jar', '*-sources.jar'])
 }
 
-// Kotlin 与 Java 必须编到同一个 jvmTarget：Java 工具链是 25，Kotlin 插件默认值更低时，
-// Gradle 9 会直接报 "Inconsistent JVM-target compatibility"。
-// `jvmDefault = NO_COMPATIBILITY` 是 `-Xjvm-default=all` 的枚举写法（Kotlin 2.4 起旧参数已弃用），
-// 让接口里带实现的成员编成真正的 JVM default 方法，而不是 Java-8 的 `Xxx$DefaultImpls` 转发桩。
 kotlin {
     compilerOptions {
         jvmTarget = JvmTarget.JVM_25
@@ -127,34 +92,24 @@ kotlin {
     }
 }
 
-// This block of code expands all declared replace properties in the specified resource targets.
 // A missing property will result in an error. Properties are expanded using ${} Groovy notation.
-var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
-    var replaceProperties = [
-            minecraft_version      : minecraft_version,
-            minecraft_version_range: minecraft_version_range,
-            neo_version            : neo_version,
-            mod_id                 : mod_id,
-            mod_name               : mod_name,
-            mod_license            : mod_license,
-            mod_version            : mod_version,
-            kff_version_range      : kff_version_range,
-            target_dxrmc_version_range : target_dxrmc_version_range
-    ]
+var replaceProperties = [
+        minecraft_version      : minecraft_version,
+        minecraft_version_range: minecraft_version_range,
+        neo_version            : neo_version,
+        mod_id                 : mod_id,
+        mod_name               : mod_name,
+        mod_license            : mod_license,
+        mod_version            : mod_version,
+        kff_version_range      : kff_version_range,
+        target_dxrmc_version_range : target_dxrmc_version_range
+]
+processResources {
     inputs.properties replaceProperties
-    // 这三行是这套模板的关键：`expand` 作用于整个拷贝规格、`from` 指到 `src/main/templates`、
-    // `into` 指到 build 目录，最后靠下面 `sourceSets.main.resources.srcDir generateModMetadata`
-    // 把展开结果当资源根加进来。模板原稿只有 `filesMatching(…) { expand(…) }` 而没有 `from`，
-    // 任务因此 NO-SOURCE、一个文件都不产出，JAR 里留下 `modId="${mod_id}"` 这种字面量。
-    expand replaceProperties
-    from "src/main/templates"
-    into layout.buildDirectory.dir("generated/sources/modMetadata")
+    filesMatching("META-INF/neoforge.mods.toml") {
+        expand replaceProperties
+    }
 }
-// Include the output of "generateModMetadata" as an input directory for the build
-// this works with both building through Gradle and the IDE.
-sourceSets.main.resources.srcDir generateModMetadata
-// To avoid having to run "generateModMetadata" manually, make it run on every project reload
-neoForge.ideSyncTask generateModMetadata
 
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
@@ -171,10 +126,9 @@ publishing {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8'
 }
 
-// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
 idea {
     module {
         downloadSources = true

@@ -11,17 +11,6 @@ import net.minecraft.core.Direction
 import net.minecraft.world.level.block.Block
 import net.minecraft.world.phys.Vec3
 
-/**
- * 天空方块渲染器：把一个 1x1x1 的立方体按「屏幕空间投影」画出来。
- *
- * 顶点位置就是方块的六个面（相机相对坐标，由 `LevelRenderer` 在提交前平移好），而采样坐标由片元
- * 着色器用 `gl_FragCoord` 推出来 —— 于是这个面在屏幕上覆盖的每一个像素，取到的正是同一像素在天空
- * 离屏贴图里的颜色。结果是：站在方块里看，看到的是「把这一块立方体从视野里挖掉，露出后面的天空」，
- * 而不是把天空拉伸到方块面上的贴纸。这也是 literal-sky-block 的做法。
- *
- * 面可见性每帧重算（`Block.shouldRenderFace`）：被不透明邻居挡住的面不提交，方块之间相互贴合时
- * 不会因为共面而 z-fighting。
- */
 class SkyBlockEntityRenderer : BlockEntityRenderer<SkyBlockEntity, SkyBlockRenderState> {
     override fun createRenderState(): SkyBlockRenderState = SkyBlockRenderState()
 
@@ -37,7 +26,7 @@ class SkyBlockEntityRenderer : BlockEntityRenderer<SkyBlockEntity, SkyBlockRende
         val level = blockEntity.level ?: return
         val pos = blockEntity.blockPos
         val ownState = blockEntity.blockState
-        for (direction in Direction.values()) {
+        for (direction in Direction.entries) {
             val neighborState = level.getBlockState(pos.relative(direction))
             if (Block.shouldRenderFace(level, pos, ownState, neighborState, direction)) {
                 state.facesToShow.add(direction)
