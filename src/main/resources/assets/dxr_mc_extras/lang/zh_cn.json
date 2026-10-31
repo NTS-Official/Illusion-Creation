@@ -1,3 +1,22 @@
 {
-  "block.dxr_mc_extras.sky_block": "天空方块"
+  "block.dxr_mc_extras.sky_block": "天空方块",
+  "dxr_mc_extras.configuration.outline": "方块轮廓",
+  "dxr_mc_extras.configuration.outline.alpha": "不透明度",
+  "dxr_mc_extras.configuration.outline.alpha.tooltip": "轮廓颜色的不透明度（0-255）。255 会让轮廓走不透明分支，被地形深度测试挡住时可能看不见；小于 255 走半透明分支，在地形之后绘制，隔着方块也能看到。",
+  "dxr_mc_extras.configuration.outline.blue": "蓝色",
+  "dxr_mc_extras.configuration.outline.blue.tooltip": "轮廓颜色的蓝色通道（0-255）。",
+  "dxr_mc_extras.configuration.outline.button": "编辑",
+  "dxr_mc_extras.configuration.outline.enabled": "自定义方块轮廓",
+  "dxr_mc_extras.configuration.outline.enabled.tooltip": "用下面的颜色和线宽替换方块选中轮廓。关闭时保持原版轮廓。",
+  "dxr_mc_extras.configuration.outline.green": "绿色",
+  "dxr_mc_extras.configuration.outline.green.tooltip": "轮廓颜色的绿色通道（0-255）。",
+  "dxr_mc_extras.configuration.outline.red": "红色",
+  "dxr_mc_extras.configuration.outline.red.tooltip": "轮廓颜色的红色通道（0-255）。",
+  "dxr_mc_extras.configuration.outline.tooltip": "方块选中轮廓的颜色与线宽。默认值与原版一致。",
+  "dxr_mc_extras.configuration.outline.width": "线宽",
+  "dxr_mc_extras.configuration.outline.width.tooltip": "5 等于原版轮廓粗细（1-20）；结果还会乘上窗口自己的轮廓线宽，所以在高分屏上与原版一样保持同样的视觉粗细。",
+  "dxr_mc_extras.configuration.section.dxr.mc.extras.client.toml": "客户端设置",
+  "dxr_mc_extras.configuration.section.dxr.mc.extras.client.toml.title": "Illusion: Creation 客户端设置",
+  "dxr_mc_extras.configuration.section.dxr.mc.extras.client.toml.tooltip": "Illusion: Creation 的客户端侧设置。",
+  "dxr_mc_extras.configuration.title": "Illusion: Creation"
 }

@@ -3,6 +3,9 @@
   "package": "dev.nts.expdxr_extras.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [],
+  "client": [
+    "LevelRendererOutlineMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   },

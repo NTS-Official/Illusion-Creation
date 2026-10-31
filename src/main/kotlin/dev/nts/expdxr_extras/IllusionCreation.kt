@@ -19,6 +19,6 @@ class IllusionCreation(modEventBus: IEventBus) {
     init {
         // 天空方块：方块 / 物品 / 方块实体都要在注册表冻结之前挂上。
         SkyBlocks.register(modEventBus)
-        LOGGER.info("[$MODID] $MOD_NAME is constructing...")
+        LOGGER.info("$MOD_NAME constructing")
     }
 }

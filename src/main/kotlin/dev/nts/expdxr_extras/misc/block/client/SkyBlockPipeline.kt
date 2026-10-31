@@ -37,7 +37,7 @@ object SkyBlockPipeline {
     private val shaderPresent: Boolean by lazy {
         val path = "assets/$MODID/shaders/${SHADER_ID.path}.vsh"
         val present = SkyBlockPipeline::class.java.classLoader?.getResource(path) != null
-        if (!present) IllusionCreation.LOGGER.warn("[$MODID] Could not find $path. This path is optional, skipping it.")
+        if (!present) IllusionCreation.LOGGER.warn("optional resource missing: $path")
         present
     }
 

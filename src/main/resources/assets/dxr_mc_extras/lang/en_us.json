@@ -1,3 +1,22 @@
 {
-  "block.dxr_mc_extras.sky_block": "Sky Block"
+  "block.dxr_mc_extras.sky_block": "Sky Block",
+  "dxr_mc_extras.configuration.outline": "Block Outline",
+  "dxr_mc_extras.configuration.outline.alpha": "Opacity",
+  "dxr_mc_extras.configuration.outline.alpha.tooltip": "Opacity of the outline colour (0-255). 255 draws the outline in the solid phase, where terrain depth-tests it and can hide it behind blocks; below 255 it stays translucent and is drawn after terrain, so it remains visible through blocks.",
+  "dxr_mc_extras.configuration.outline.blue": "Blue",
+  "dxr_mc_extras.configuration.outline.blue.tooltip": "Blue channel of the outline colour (0-255).",
+  "dxr_mc_extras.configuration.outline.button": "Edit",
+  "dxr_mc_extras.configuration.outline.enabled": "Custom Block Outline",
+  "dxr_mc_extras.configuration.outline.enabled.tooltip": "Apply the colour and width below to the block selection outline. OFF keeps the vanilla outline.",
+  "dxr_mc_extras.configuration.outline.green": "Green",
+  "dxr_mc_extras.configuration.outline.green.tooltip": "Green channel of the outline colour (0-255).",
+  "dxr_mc_extras.configuration.outline.red": "Red",
+  "dxr_mc_extras.configuration.outline.red.tooltip": "Red channel of the outline colour (0-255).",
+  "dxr_mc_extras.configuration.outline.tooltip": "Colour and line width of the block selection outline. The defaults match vanilla.",
+  "dxr_mc_extras.configuration.outline.width": "Line Width",
+  "dxr_mc_extras.configuration.outline.width.tooltip": "5 is the vanilla outline thickness (1-20); the window's own outline width scales it, so the outline keeps the same visual weight on a HiDPI display as vanilla does.",
+  "dxr_mc_extras.configuration.section.dxr.mc.extras.client.toml": "Client Settings",
+  "dxr_mc_extras.configuration.section.dxr.mc.extras.client.toml.title": "Illusion: Creation Client Settings",
+  "dxr_mc_extras.configuration.section.dxr.mc.extras.client.toml.tooltip": "Client-side settings of Illusion: Creation.",
+  "dxr_mc_extras.configuration.title": "Illusion: Creation"
 }
